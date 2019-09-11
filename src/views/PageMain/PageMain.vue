@@ -6,7 +6,7 @@
     >
       <ul
         class="page__list"
-        :style="{transform: `translateX(20vw) rotate3d(0, 1, 1, ${defaultNavAngle}deg)`}"
+        :style="{transform: `translate(${computedTranslateX}px, ${computedTranslateY}px`}"
       >
         <li class="page__list-item">
           <router-link
@@ -129,17 +129,26 @@ import anime from 'animejs';
 export default {
   data() {
     return {
-      angle: 15,
+      translateX: 15,
+      translateY: 15,
       tl: null,
     };
   },
   computed: {
-    defaultNavAngle: {
+    computedTranslateX: {
       get() {
-        return this.angle;
+        return this.translateX;
       },
       set(v) {
-        this.angle = v;
+        this.translateX = v;
+      },
+    },
+    computedTranslateY: {
+      get() {
+        return this.translateY;
+      },
+      set(v) {
+        this.translateY = v;
       },
     },
   },
@@ -164,8 +173,10 @@ export default {
     mouseMoveAnimation(e) {
       const x = e.clientX;
       const y = e.clientY;
-      const sum = (x + y) / 100 - 15;
-      this.defaultNavAngle = sum;
+      const computedX = x / 100;
+      const computedY = y / 100;
+      this.computedTranslateX = computedX;
+      this.computedTranslateY = computedY;
     },
   },
   beforeRouteLeave(to, from, next) {
@@ -193,11 +204,13 @@ export default {
   .page {
     &__nav {
       display: flex;
+      position: relative;
       justify-content: center;
       align-items: center;
       height: 100%;
     }
     &__list {
+      position: absolute;
       perspective: 1000px;
       transform-style: preserve-3d;
       list-style: none;

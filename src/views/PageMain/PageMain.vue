@@ -131,7 +131,8 @@ export default {
     return {
       translateX: 15,
       translateY: 15,
-      tl: null,
+      inAnimationInstance: null,
+      outAnimationInstance: null,
     };
   },
   computed: {
@@ -154,12 +155,12 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.initAnimation();
+      this.inAnimation();
     });
   },
   methods: {
-    initAnimation() {
-      this.tl = anime({
+    inAnimation() {
+      this.inAnimationInstance = anime({
         targets: '.page__path',
         strokeDashoffset: [anime.setDashoffset, 0],
         easing: 'easeInCirc',
@@ -180,7 +181,7 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-    anime({
+    this.outAnimationInstance = anime({
       targets: '.page__path',
       strokeDashoffset: [0, anime.setDashoffset],
       easing: 'easeOutCirc',

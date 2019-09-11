@@ -95,7 +95,6 @@ export default {
     &__list {
       perspective: 1000px;
       transform-style: preserve-3d;
-      transform: translateX(20vw) rotate3d(0, 1, 1, 15deg);
       list-style: none;
     }
     &__list-item {

@@ -124,13 +124,13 @@
 </template>
 
 <script>
-import anime from 'animejs';
+import anime from "animejs";
 
 export default {
   data() {
     return {
       angle: 15,
-      tl: null,
+      tl: null
     };
   },
   computed: {
@@ -140,8 +140,8 @@ export default {
       },
       set(v) {
         this.angle = v;
-      },
-    },
+      }
+    }
   },
   mounted() {
     this.initAnimation();
@@ -150,14 +150,14 @@ export default {
   methods: {
     initAnimation() {
       this.tl = anime({
-        targets: '.page__path',
+        targets: ".page__path",
         strokeDashoffset: [anime.setDashoffset, 0],
-        easing: 'easeInOutSine',
+        easing: "easeInOutSine",
         autoplay: false,
         duration: 1500,
         delay(el, i) {
           return i * 550;
-        },
+        }
       });
     },
     mouseMoveAnimation(e) {
@@ -171,8 +171,24 @@ export default {
     },
     animateOut() {
       this.tl.reverse();
-    },
+    }
   },
+  beforeRouteLeave(to, from, next) {
+    anime({
+      targets: ".page__path",
+      strokeDashoffset: [0, anime.setDashoffset],
+      easing: "easeInOutSine",
+      duration: 1500,
+      delay(el, i) {
+        return i * 550;
+      },
+      complete(anim) {
+        if (anim.completed) {
+          next();
+        }
+      }
+    });
+  }
 };
 </script>
 

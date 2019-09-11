@@ -158,17 +158,21 @@ export default {
       this.inAnimation();
     });
   },
+  beforeDestroy() {
+    this.inAnimationInstance = null;
+    this.outAnimationInstance = null;
+  },
   methods: {
     inAnimation() {
       this.inAnimationInstance = anime({
-        targets: '.page__path',
+        targets: ".page__path",
         strokeDashoffset: [anime.setDashoffset, 0],
-        easing: 'easeInCirc',
+        easing: "easeInCirc",
         autoplay: true,
         duration: 1500,
         delay(el, i) {
           return i * 550;
-        },
+        }
       });
     },
     mouseMoveAnimation(e) {
@@ -178,7 +182,7 @@ export default {
       const computedY = y / 100;
       this.computedTranslateX = computedX;
       this.computedTranslateY = computedY;
-    },
+    }
   },
   beforeRouteLeave(to, from, next) {
     this.outAnimationInstance = anime({

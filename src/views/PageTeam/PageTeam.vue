@@ -9,45 +9,53 @@
       <g>
         <circle
           class="page__circle--one"
-          fill="#000000"
+          fill="#F96167"
           cx="400"
           cy="400"
           r="600"
         />
         <circle
           class="page__circle--two"
-          fill="#180d1c"
+          fill="#FCE77D"
           cx="400"
           cy="400"
           r="500"
         />
         <circle
           class="page__circle--three"
-          fill="#261431"
+          fill="#F96167"
           cx="400"
           cy="400"
           r="400"
         />
         <circle
           class="page__circle--four"
-          fill="#351947"
+          fill="#FCE77D"
           cx="400"
           cy="400"
           r="300"
         />
         <circle
           class="page__circle--five"
-          fill="#451e5e"
+          fill="#F96167"
           cx="400"
           cy="400"
           r="200"
         />
         <circle
           class="page__circle--six"
-          fill="#552277"
+          fill="#FCE77D"
           cx="400"
           cy="400"
           r="100"
+        />
+        <circle
+          class="page__circle--seven"
+          fill="#F96167"
+          cx="400"
+          cy="400"
+          r="50"
+          @click="$router.go(-1)"
         />
       </g>
     </svg>
@@ -61,6 +69,7 @@ export default {
   data() {
     return {
       inAnimationInstance: null,
+      outAnimationInstance: null,
     };
   },
   mounted() {
@@ -68,16 +77,22 @@ export default {
       this.inAnimation();
     });
   },
+  destroyed() {
+    this.inAnimationInstance = null;
+    this.outAnimationInstance = null;
+  },
   methods: {
     inAnimation() {
       this.inAnimationInstance = anime.timeline({
-        easing(el, i, total) {
-          return function (t) {
-            return Math.pow(Math.sin(t * (i + 1)), total);
-          };
-        },
+        easing: 'easeInBounce',
         autoplay: true,
-        duration: 700,
+        duration: 500,
+      });
+      this.inAnimationInstance.add({
+        targets: '.page__circle--seven',
+        easing: 'easeInCirc',
+        duration: 300,
+        r: [0, 50],
       });
       this.inAnimationInstance.add({
         targets: '.page__circle--six',
@@ -104,6 +119,52 @@ export default {
         r: [0, 600],
       });
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    this.outAnimationInstance = anime.timeline({
+      easing: 'linear',
+      duration: 500,
+      complete(anim) {
+        if (anim.completed) {
+          next();
+        }
+      },
+    });
+
+    this.outAnimationInstance.add({
+      targets: '.page__circle--one',
+      r: [600, 0],
+    });
+    this.outAnimationInstance.add({
+      targets: '.page__circle--two',
+      r: [500, 0],
+    });
+
+    this.outAnimationInstance.add({
+      targets: '.page__circle--three',
+      r: [400, 0],
+    });
+
+    this.outAnimationInstance.add({
+      targets: '.page__circle--four',
+      r: [300, 0],
+    });
+
+    this.outAnimationInstance.add({
+      targets: '.page__circle--five',
+      r: [200, 0],
+    });
+
+    this.outAnimationInstance.add({
+      targets: '.page__circle--six',
+      r: [100, 0],
+    });
+
+    this.outAnimationInstance.add({
+      targets: '.page__circle--seven',
+      duration: 300,
+      r: [50, 0],
+    });
   },
 };
 </script>
